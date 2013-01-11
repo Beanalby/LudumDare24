@@ -1,0 +1,25 @@
+#NTEVersion 6
+#BeginNodes 5
+179 275
+engine.graphics.synthesis.texture.FilterColorize
+ExportName "" Gray_to_Color_Mapping 2 0.039215688 0.039215688 0.039215688 1.0 0.009661836 0.14901961 0.14901961 0.14901961 1.0 1.0 endparameters
+430 401
+engine.graphics.synthesis.texture.FilterNormalMap
+ExportName "" Strength 10.0 endparameters
+313 252
+engine.graphics.synthesis.texture.FilterColorize
+ExportName "" Gray_to_Color_Mapping 2 1.0 1.0 1.0 1.0 0.77294683 0.003921569 0.003921569 0.003921569 1.0 0.8405797 endparameters
+138 464
+engine.graphics.synthesis.texture.FilterEmboss
+ExportName "" Strength 8.0 Angle 45.0 endparameters
+89 53
+engine.graphics.synthesis.texture.PatternTile
+ExportName "" Transformation 3.9999998 0.0 0.0 0.0 3.9999998 0.0 0.0 0.0 1.0 Color_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 BorderX 0.1 BorderY 0.1 Smooth 0.0 endparameters
+#EndNodes
+#BeginConnections 4
+2 1 0
+0 3 0
+4 0 0
+4 2 0
+#EndConnections
+glpreview 0 1 2 -1 Object 0 Spec._Power 20.0 POM_Strength 0.25 Ambient 0.375 TexScale_U 4 TexScale_V 4 CamRotX 42.0 CamRotY 241.0 CamDist 2.5000005 endglpreview
