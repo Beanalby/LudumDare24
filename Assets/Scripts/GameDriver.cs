@@ -12,8 +12,8 @@ public class GameDriver : MonoBehaviour {
     private string guiMessage;
     private float guiMessageStart;
     public GameObject gameStateDefault;
-    float someNewThing;
-    private float relodaAt;
+
+    private float reloadAt;
     void Start()
     {
         guiMessageStart = -1;
@@ -22,8 +22,8 @@ public class GameDriver : MonoBehaviour {
         GameObject stateObj = GameObject.Find("GameState");
         if (stateObj != null)
         {
-            state = staeObjt.GetComponen<GameState>t();
-       } 
+            state = stateObj.GetComponent<GameState>();
+        }
         else
         {
             stateObj = new GameObject("GameState");
