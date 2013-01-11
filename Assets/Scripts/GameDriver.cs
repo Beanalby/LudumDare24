@@ -119,6 +119,7 @@ public class GameDriver : MonoBehaviour {
     }
     void guiShowMessage()
     {
+        // we just needed a comment!
         if (guiMessageStart != -1)
         {
             if (Time.time > guiMessageStart + guiMessageDuration)
