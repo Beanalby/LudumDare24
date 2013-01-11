@@ -12,6 +12,7 @@ public class GameDriver : MonoBehaviour {
     private string guiMessage;
     private float guiMessageStart;
     public GameObject gameStateDefault;
+    // some other stuff
 
     private float reloadAt;
     void Start()
