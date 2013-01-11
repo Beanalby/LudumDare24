@@ -9,6 +9,7 @@ public class MusicSource : MonoBehaviour {
     void Awake()
     {
         DontDestroyOnLoad(transform.gameObject);
+        source = GetComponent<AudioSource>();
         source.playOnAwake = true;
         source.loop = true;
     }

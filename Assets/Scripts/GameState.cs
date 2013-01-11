@@ -4,7 +4,7 @@ using System.Collections;
 public class GameState : MonoBehaviour {
 
     public ArrayList upgrades;
-    public ;
+    public Upgrade currentAction;
     public string previousScene;
 
 	// Use this for initialization
