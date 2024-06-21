@@ -7,9 +7,10 @@ public class DudeController : MonoBehaviour {
     public AudioClip shieldSound;
 
     private float turnSpeed = 5f;
-    private float moveSpeed = .5f;
-    private float gravity = 10f;
-    private float jumpDist = 4f;
+    private float moveSpeed = .25f;
+    private float gravity = 200f;
+    private float jumpVelocity = 110f;
+    private float verticalVelocity = 0f;
 
     private float cameraDistance = 140f;
     private float cameraDeadzone = 30f;
@@ -36,7 +37,9 @@ public class DudeController : MonoBehaviour {
         cont = GetComponent<CharacterController>();
         wh = GetComponent<WeaponHandler>();
         isShielded = false;
-        upgrades = new ArrayList();
+        // may already be initalized in AddUpgrades
+        if (upgrades == null)
+            upgrades = new ArrayList();
         anim = GetComponentInChildren<Animation>();
         jumpClipLength = anim.GetClip("Jump").length;
         smr = GetComponentInChildren<SkinnedMeshRenderer>();
@@ -49,19 +52,14 @@ public class DudeController : MonoBehaviour {
         // fix the jump animation
         if (jumpTime != -1 && jumpTime + jumpClipLength < Time.time)
         {
-            Debug.Log("Post-jump going to idle at " + Time.time);
             anim.Play("Idle");
             jumpTime = -1;
         }
+        moveSelf();
         moveCamera();
     }
 
-    void FixedUpdate()
-    {
-        moveSelf();
-    }
-
-    void moveSelf()
+     void moveSelf()
     {
         bool didJump = false;
         Vector3 lookDir = Vector3.zero;
@@ -73,17 +71,24 @@ public class DudeController : MonoBehaviour {
             thisMove = lookDir;
             thisMove *= moveSpeed;
             // jump if the press the jump button (space), or fire when jump is selected
-            if (cont.isGrounded && (Input.GetButtonDown("Jump") ||
-                    (Input.GetButtonDown("Fire1") && wh.GetCurrentAction() == Upgrade.Jump)))
+            if (cont.isGrounded)
             {
-                if (HasUpgrade(Upgrade.Jump))
+                verticalVelocity = 0 - (gravity * Time.deltaTime);
+                if ((Input.GetButtonDown("Jump") ||
+                    (Input.GetButtonDown("Fire1") && wh.GetCurrentAction() == Upgrade.Jump)))
                 {
-                    thisMove.y += jumpDist;
-                    anim.Play("Jump");
-                    AudioSource.PlayClipAtPoint(jumpSound, Camera.main.transform.position);
-                    jumpTime = Time.time;
-                    didJump = true;
+                    if (HasUpgrade(Upgrade.Jump))
+                    {
+                        verticalVelocity = jumpVelocity;
+                        anim.Play("Jump");
+                        AudioSource.PlayClipAtPoint(jumpSound, Camera.main.transform.position);
+                        jumpTime = Time.time;
+                        didJump = true;
+                    }
                 }
+            } else
+            {
+                verticalVelocity -= (gravity * Time.deltaTime);
             }
         }
         if (cont.isGrounded && !didJump && !isShielded)
@@ -97,8 +102,7 @@ public class DudeController : MonoBehaviour {
                 anim.Play("Idle");
             }
         }
-        float yOffset = (cont.velocity.y - gravity);
-        thisMove.y += yOffset * Time.deltaTime;
+        thisMove.y = verticalVelocity * Time.deltaTime;
         cont.Move(thisMove);
         if (Vector3.Magnitude(lookDir) != 0)
         {
@@ -143,7 +147,7 @@ public class DudeController : MonoBehaviour {
     public void ShieldOn()
     {
         isShielded = true;
-        Debug.Log("SHIELD ON!");
+        //Debug.Log("SHIELD ON!");
         smr.materials[0] = shieldMaterial;
         Material[] m = smr.materials;
         m[0] = shieldMaterial;
@@ -154,7 +158,7 @@ public class DudeController : MonoBehaviour {
     public void ShieldOff()
     {
         isShielded = false;
-        Debug.Log("Shield off.");
+        //Debug.Log("Shield off.");
         Material[] m = smr.materials;
         m[0] = normalMaterial;
         smr.materials = m;
@@ -191,6 +195,12 @@ public class DudeController : MonoBehaviour {
 
     public void AddUpgrade(Upgrade up)
     {
+        // may get called before our own Start
+        if(upgrades == null)
+            upgrades = new ArrayList();
+        if(wh == null) 
+            wh = GetComponent<WeaponHandler>();
+        Debug.Log("Adding upgrade (" + up + ") to (" + upgrades + ")");
         upgrades.Add(up);
         Debug.Log("Added upgrade " + up + ", now there are " + upgrades.Count);
         if (wh.GetCurrentAction() == Upgrade.None)

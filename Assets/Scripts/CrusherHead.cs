@@ -35,7 +35,6 @@ public class CrusherHead : MonoBehaviour {
                 currentBottom = bottom;
             if (lastDir == 0)
             {
-                Debug.Log("Playing up " + soundDown);
                 if (soundUp != null)
                     AudioSource.PlayClipAtPoint(soundUp, Camera.main.transform.position);
                 lastDir = 1;
@@ -47,7 +46,6 @@ public class CrusherHead : MonoBehaviour {
             to = currentBottom;
             if (lastDir == 1)
             {
-                Debug.Log("Playing down " + soundDown);
                 if (soundDown != null)
                     AudioSource.PlayClipAtPoint(soundDown, Camera.main.transform.position);
                 lastDir = 0;
@@ -60,14 +58,17 @@ public class CrusherHead : MonoBehaviour {
     {
         if (col.gameObject != dude)
             return;
-        Debug.Log("Crusher onCollisionEnter...");
         foreach(ContactPoint cp in col.contacts)
         {
-            Debug.Log("normal=" + cp.normal);
             DudeController dc = dude.gameObject.GetComponent<DudeController>();
             if (dc.IsShielded())
             {
                 Debug.Log("HE LIVES!");
+                // bottom out just a little above him
+                transform.position = new Vector3(
+                    transform.position.x,
+                    transform.position.y + 1,
+                    transform.position.z);
                 currentBottom = transform.position;
             }
             else
@@ -81,7 +82,7 @@ public class CrusherHead : MonoBehaviour {
 
     void OnTriggerEnter(Collider col)
     {
-        //Debug.Log("Crusher onTriggerEnter with " + col.gameObject.name);
-        //Debug.Log("I'm at " + gameObject.transform.position + ", dude=" + col.gameObject.transform.position + ", dist=" + Vector3.Distance(gameObject.transform.position, col.gameObject.transform.position));
+        Debug.Log(gameObject.name + " onTriggerEnter with " + col.gameObject.name);
+        Debug.Log("I'm at " + gameObject.transform.localPosition + ", dude=" + col.gameObject.transform.position + ", dist=" + Vector3.Distance(gameObject.transform.position, col.gameObject.transform.position));
     }
 }

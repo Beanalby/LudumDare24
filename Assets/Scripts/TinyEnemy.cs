@@ -54,7 +54,10 @@ public class TinyEnemy : MonoBehaviour {
         if (col.gameObject.GetComponent<Bullet>() != null)
         {
             AudioSource.PlayClipAtPoint(DeathSound, Camera.main.transform.position);
-            Instantiate(DeathEffect, transform.position, transform.rotation);
+            if (DeathEffect)
+            {
+                Instantiate(DeathEffect, transform.position, transform.rotation);
+            }
             Destroy(gameObject);
             Destroy(col.gameObject);
             Destroy(this);
